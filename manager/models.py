@@ -18,7 +18,7 @@ class Category(models.Model):
         unique_together = ('name', 'type')
 
     def __str__(self):
-        return f"{self.type.name} - {self.name}"
+        return f"{self.name} - {self.type.name}"
 
 
 class Subcategory(models.Model):
@@ -29,7 +29,7 @@ class Subcategory(models.Model):
         unique_together = ('name', 'category')
 
     def __str__(self):
-        return f"{self.category.name} - {self.name}"
+        return f"{self.name} - {self.category.name}"
 
 
 class Status(models.Model):
