@@ -40,9 +40,8 @@ class Status(models.Model):
 
 
 class Transaction(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    custom_date = models.DateField(default=timezone.now)
-    status = models.ForeignKey(Status, on_delete=models.PROTECT)
+    created_date = models.DateField(default=timezone.now)
+    status = models.ForeignKey(Status, on_delete=models.PROTECT, null=True)
     type = models.ForeignKey(OperationType, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.PROTECT)
@@ -54,12 +53,12 @@ class Transaction(models.Model):
         if self.category and self.type:
             if self.category.type != self.type:
                 raise ValidationError(
-                    {"category": "Категория должна принадлежать выбранному типу."}
+                    {'category': 'Категория должна принадлежать выбранному типу.'}
                 )
         elif self.subcategory and self.category:
             if self.subcategory.category != self.category:
                 raise ValidationError(
-                    {"subcategory": "Подкатегория должна принадлежать выбранной категории."}
+                    {'subcategory': 'Подкатегория должна принадлежать выбранной категории.'}
                 )
 
     def __str__(self):
