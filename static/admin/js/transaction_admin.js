@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const typeId = typeField.value;
         const typeName = typeField.options[typeField.selectedIndex]?.text || '';
 
+        // Сохраняем текущее значение категории
+        const selectedCategoryId = categoryField.value;
+
         fetch(`/admin/manager/transaction/filter-categories/?type_id=${typeId}`)
             .then(response => response.json())
             .then(data => {
@@ -19,6 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     categoryField.appendChild(option);
                 });
 
+                // Восстанавливаем выбранное значение категории, если оно существует в новом списке
+                if (data.some(cat => cat.id == selectedCategoryId)) {
+                    categoryField.value = selectedCategoryId;
+                }
+
                 updateSubcategories();
             });
     }
@@ -27,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateSubcategories() {
         const categoryId = categoryField.value;
         const categoryName = categoryField.options[categoryField.selectedIndex]?.text || '';
+
+        // Сохраняем текущее значение подкатегории
+        const selectedSubcategoryId = subcategoryField.value;
 
         if (categoryId) {
             fetch(`/admin/manager/transaction/filter-subcategories/?category_id=${categoryId}`)
@@ -39,12 +50,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         option.textContent = `${subcategory.name} - ${categoryName.split(' - ')[0]}`;
                         subcategoryField.appendChild(option);
                     });
+
+                    // Восстанавливаем выбранное значение подкатегории, если оно существует в новом списке
+                    if (data.some(subcat => subcat.id == selectedSubcategoryId)) {
+                        subcategoryField.value = selectedSubcategoryId;
+                    }
                 });
         } else {
             subcategoryField.innerHTML = '';
         }
     }
 
+    // Назначаем обработчики событий
     if (typeField && categoryField) {
         typeField.addEventListener('change', updateCategories);
     }
@@ -54,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     try {
+        // Вызываем функции при загрузке страницы, чтобы показать правильные данные по умолчанию
         updateCategories();
         updateSubcategories();
     } catch (error) {
