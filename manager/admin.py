@@ -54,7 +54,7 @@ class TransactionAdmin(admin.ModelAdmin):
         return JsonResponse(list(subcategories), safe=False)
 
     class Media:
-        js = ('admin/js/transaction_admin.js',)
+        js = ('admin/js/transaction_fields_updater.js',)
 
 
 admin.site.register(OperationType)
