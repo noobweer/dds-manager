@@ -31,3 +31,4 @@ class EditTransaction(APIView):
 
         edit_result = TransactionsService().edit_transaction(data)
         return Response(edit_result)
+
