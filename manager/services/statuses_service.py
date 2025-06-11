@@ -35,9 +35,6 @@ class StatusesService:
                 return {'is_edited': False, 'message': f'Invalid status_id ({status_id})'}
             status_obj = self.Status.get(id=status_id)
 
-            if (status_obj.name != status_name) and (self.Status.filter(name=status_name).exists()):
-                return {'is_edited': False, 'message': f'Status with this name already exists ({status_id}, {status_name})'}
-
             status_obj.name = status_name
             status_obj.save()
 
