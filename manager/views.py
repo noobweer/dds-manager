@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from .services.transactions_services import *
 from .services.statuses_service import *
 from .services.types_service import *
+from .services.categories_service import *
+from .services.subcategories_service import *
 
 
 # Create your views here.
@@ -104,3 +106,69 @@ class TypesView(APIView):
         return Response(types_result)
 
 
+@permission_classes([IsAuthenticated])
+class CreateCategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        create_result = CategoryService().create_category(data)
+        return Response(create_result)
+
+
+@permission_classes([IsAuthenticated])
+class EditCategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        edit_result = CategoryService().edit_category(data)
+        return Response(edit_result)
+
+
+@permission_classes([IsAuthenticated])
+class DeleteCategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        delete_result = CategoryService().delete_category(data)
+        return Response(delete_result)
+
+
+@permission_classes([IsAuthenticated])
+class CategoriesView(APIView):
+    def get(self):
+        categories_result = CategoryService().all_categories()
+        return Response(categories_result)
+
+
+@permission_classes([IsAuthenticated])
+class CreateSubcategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        create_result = SubcategoryService().create_subcategory(data)
+        return Response(create_result)
+
+
+@permission_classes([IsAuthenticated])
+class EditSubcategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        edit_result = SubcategoryService().edit_subcategory(data)
+        return Response(edit_result)
+
+
+@permission_classes([IsAuthenticated])
+class DeleteSubcategoryView(APIView):
+    def post(self, request):
+        data = request.data
+
+        delete_result = SubcategoryService().delete_subcategory(data)
+        return Response(delete_result)
+
+
+@permission_classes([IsAuthenticated])
+class SubcategoriesView(APIView):
+    def get(self):
+        subcategories_result = SubcategoryService().all_subcategories()
+        return Response(subcategories_result)
