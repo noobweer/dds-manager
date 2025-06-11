@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 
 from .services.transactions_services import *
 from .services.statuses_service import *
+from .services.types_service import *
 
 
 # Create your views here.
@@ -69,5 +70,37 @@ class StatusesView(APIView):
         return Response(statuses_result)
 
 
+@permission_classes([IsAuthenticated])
+class CreateTypeView(APIView):
+    def post(self, request):
+        data = request.data
+
+        create_result = OperationTypeService().create_type(data)
+        return Response(create_result)
+
+
+@permission_classes([IsAuthenticated])
+class EditTypeView(APIView):
+    def post(self, request):
+        data = request.data
+
+        edit_result = OperationTypeService().edit_type(data)
+        return Response(edit_result)
+
+
+@permission_classes([IsAuthenticated])
+class DeleteTypeView(APIView):
+    def post(self, request):
+        data = request.data
+
+        delete_result = OperationTypeService().delete_type(data)
+        return Response(delete_result)
+
+
+@permission_classes([IsAuthenticated])
+class TypesView(APIView):
+    def get(self):
+        types_result = OperationTypeService().all_types()
+        return Response(types_result)
 
 
