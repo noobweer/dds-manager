@@ -1,4 +1,5 @@
 from ..models import *
+from ..serializers import *
 
 
 class StatusesService:
@@ -60,3 +61,13 @@ class StatusesService:
             return {'is_delete': True, 'message': f'Status deleted successfully'}
         except Exception as e:
             return {'is_edited': False, 'message': str(e)}
+
+    def all_statuses(self):
+        try:
+            statuses = self.Status.all()
+            serializer = StatusSerializer(statuses, many=True)
+
+            return {'success': True, 'statuses': serializer.data}
+        except Exception as e:
+            print(e)
+            return {'success': False, 'statuses': []}
