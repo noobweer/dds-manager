@@ -2,12 +2,14 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
 from .services.transactions_services import *
+from .services.statuses_service import *
 
 
 # Create your views here.
 @permission_classes([IsAuthenticated])
-class CreateTransactions(APIView):
+class CreateTransactionsView(APIView):
     def post(self, request):
         data = request.data
 
@@ -16,7 +18,7 @@ class CreateTransactions(APIView):
 
 
 @permission_classes([IsAuthenticated])
-class DeleteTransaction(APIView):
+class DeleteTransactionView(APIView):
     def post(self, request):
         data = request.data
 
@@ -25,10 +27,47 @@ class DeleteTransaction(APIView):
 
 
 @permission_classes([IsAuthenticated])
-class EditTransaction(APIView):
+class EditTransactionView(APIView):
     def post(self, request):
         data = request.data
 
         edit_result = TransactionsService().edit_transaction(data)
         return Response(edit_result)
+
+
+@permission_classes([IsAuthenticated])
+class StatusCreateView(APIView):
+    def post(self, request):
+        data = request.data
+
+        create_result = StatusesService().create_status(data)
+        return Response(create_result)
+
+
+@permission_classes([IsAuthenticated])
+class StatusEditView(APIView):
+    def post(self, request):
+        data = request.data
+
+        edit_result = StatusesService().edit_status(data)
+        return Response(edit_result)
+
+
+@permission_classes([IsAuthenticated])
+class StatusDeleteView(APIView):
+    def post(self, request):
+        data = request.data
+
+        delete_result = StatusesService().delete_status(data)
+        return Response(delete_result)
+
+
+@permission_classes([IsAuthenticated])
+class StatusesView(APIView):
+    def get(self):
+        statuses_result = StatusesService().all_statuses()
+        return Response(statuses_result)
+
+
+
 
