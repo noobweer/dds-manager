@@ -1,4 +1,5 @@
 from ..models import *
+from ..serializers import *
 
 
 class TransactionsService:
@@ -10,6 +11,58 @@ class TransactionsService:
         self.Subcategory = Subcategory.objects
 
     # NOTE: Write TransactionsView with filters (date, date range, status, type, category, subcategory)
+    def all_transactions(self, data):
+        try:
+            status_list = data.get('status', [])
+            type_list = data.get('type', [])
+            category_list = data.get('category', [])
+            subcategory_list = data.get('subcategory', [])
+            date_list = data.get('date', [])
+
+            result = self.Transaction.all()
+
+            if status_list:
+                valid_statuses = []
+                for status_name in status_list:
+                    if not self.Status.filter(name=status_name).exists():
+                        return {'success': False, 'transactions': []}
+                    valid_statuses.append(self.Status.get(name=status_name))
+
+                result = result.filter(status__in=valid_statuses)
+
+            if type_list:
+                valid_types = []
+                for type_name in type_list:
+                    if not self.OperationType.filter(name=type_name).exists():
+                        return {'success': False, 'transactions': []}
+                    valid_types.append(self.OperationType.get(name=type_name))
+
+                result = result.filter(type__in=valid_types)
+
+            if category_list:
+                valid_categories = []
+                for category_name in type_list:
+                    if not self.Category.filter(name=category_name).exists():
+                        return {'success': False, 'transactions': []}
+                    valid_categories.append(self.Category.get(name=category_name))
+
+                result = result.filter(category__in=valid_categories)
+
+            if subcategory_list:
+                valid_subcategories = []
+                for subcategory_name in subcategory_list:
+                    if not self.Subcategory.filter(name=subcategory_name).exists():
+                        return {'success': False, 'transactions': []}
+                    valid_subcategories.append(self.Subcategory.get(name=subcategory_name))
+
+                result = result.filter(subcategory__in=valid_subcategories)
+
+            serializer = TransactionSerializer(result, many=True)
+            return {'success': True, 'transactions': serializer.data}
+        except Exception as e:
+            print(e)
+            return {'seccess': False, 'transactions': []}
+
     def create_transaction(self, data):
         try:
             status_name = data.get('status')

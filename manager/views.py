@@ -39,6 +39,14 @@ class EditTransactionView(APIView):
 
 
 @permission_classes([IsAuthenticated])
+class TransactionsView(APIView):
+    def post(self, request):
+        data = request.data
+
+        transactions_result = TransactionsService().all_transactions(data)
+        return Response(transactions_result)
+
+@permission_classes([IsAuthenticated])
 class StatusCreateView(APIView):
     def post(self, request):
         data = request.data
