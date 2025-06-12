@@ -1,7 +1,15 @@
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from .views import *
 
 urlpatterns = [
+    # Auth urls
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # All urls for transactions
     path('create-transaction/', CreateTransactionView.as_view(), name='create-transaction'),
     path('delete-transaction/', DeleteTransactionView.as_view(), name='delete-transaction'),
