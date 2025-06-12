@@ -12,7 +12,7 @@ from .services.subcategories_service import *
 
 # Create your views here.
 @permission_classes([IsAuthenticated])
-class CreateTransactionsView(APIView):
+class CreateTransactionView(APIView):
     def post(self, request):
         data = request.data
 
@@ -46,8 +46,9 @@ class TransactionsView(APIView):
         transactions_result = TransactionsService().all_transactions(data)
         return Response(transactions_result)
 
+
 @permission_classes([IsAuthenticated])
-class StatusCreateView(APIView):
+class CreateStatusView(APIView):
     def post(self, request):
         data = request.data
 
@@ -56,7 +57,7 @@ class StatusCreateView(APIView):
 
 
 @permission_classes([IsAuthenticated])
-class StatusEditView(APIView):
+class EditStatusView(APIView):
     def post(self, request):
         data = request.data
 
@@ -65,7 +66,7 @@ class StatusEditView(APIView):
 
 
 @permission_classes([IsAuthenticated])
-class StatusDeleteView(APIView):
+class DeleteStatusView(APIView):
     def post(self, request):
         data = request.data
 
