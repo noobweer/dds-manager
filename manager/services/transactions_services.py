@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from ..models import *
 from ..serializers import *
 
@@ -21,6 +23,34 @@ class TransactionsService:
 
             result = self.Transaction.all()
 
+            if date_list:
+                if len(date_list) == 2:
+                    date_from_str, date_to_str = date_list
+                    if date_to_str == '1970-01-01':
+                        # Одна дата
+                        try:
+                            single_date = datetime.strptime(date_from_str, '%Y-%m-%d').date()
+                            result = result.filter(created_date=single_date)
+                        except ValueError:
+                            return {'success': False, 'transactions': []}
+                    else:
+                        # Диапазон дат
+                        try:
+                            date_from = datetime.strptime(date_from_str, '%Y-%m-%d').date()
+                            date_to = datetime.strptime(date_to_str, '%Y-%m-%d').date()
+
+                            if date_from > date_to:
+                                return {'success': False, 'transactions': []}
+
+                            result = result.filter(
+                                created_date__gte=date_from,
+                                created_date__lte=date_to
+                            )
+                        except ValueError:
+                            return {'success': False, 'transactions': []}
+                else:
+                    return {'success': False, 'transactions': []}
+
             if status_list:
                 valid_statuses = []
                 for status_name in status_list:
@@ -41,7 +71,7 @@ class TransactionsService:
 
             if category_list:
                 valid_categories = []
-                for category_name in type_list:
+                for category_name in category_list:
                     if not self.Category.filter(name=category_name).exists():
                         return {'success': False, 'transactions': []}
                     valid_categories.append(self.Category.get(name=category_name))
@@ -61,7 +91,7 @@ class TransactionsService:
             return {'success': True, 'transactions': serializer.data}
         except Exception as e:
             print(e)
-            return {'seccess': False, 'transactions': []}
+            return {'success': False, 'transactions': []}
 
     def create_transaction(self, data):
         try:
