@@ -75,9 +75,8 @@ class SubcategoryService:
 
     def all_subcategories(self):
         try:
-            subcategories = self.Subcategory.all()
-            serializer = StatusSerializer(subcategories, many=True)
-
+            subcategories = Subcategory.objects.select_related('category').all()
+            serializer = SubcategorySerializer(subcategories, many=True)
             return {'success': True, 'subcategories': serializer.data}
         except Exception as e:
             print(e)

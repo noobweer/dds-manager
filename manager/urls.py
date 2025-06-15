@@ -7,8 +7,8 @@ from .views import *
 
 urlpatterns = [
     # Auth urls
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # All urls for transactions
     path('create-transaction/', CreateTransactionView.as_view(), name='create-transaction'),

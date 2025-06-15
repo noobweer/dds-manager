@@ -10,7 +10,7 @@ class TransactionsService:
         self.Category = Category.objects
         self.Subcategory = Subcategory.objects
 
-    # NOTE: Write TransactionsView with filters (date, date range, status, type, category, subcategory)
+    # TransactionsView with filters (date, status, type, category, subcategory)
     def all_transactions(self, data):
         try:
             status_list = data.get('status', [])
@@ -105,11 +105,11 @@ class TransactionsService:
             if not self.Transaction.filter(id=transaction_id).exists():
                 return {'is_deleted': False, 'message': f'Invalid transaction_id ({transaction_id})'}
 
-            self.Transaction.delete(id=transaction_id)
+            self.Transaction.filter(id=transaction_id).delete()
 
-            return {'is_deleted': False, 'message': f'Transaction deleted successfully'}
+            return {'is_deleted': True, 'message': f'Transaction deleted successfully'}
         except Exception as e:
-            return {'is_deleted': True, 'message': str(e)}
+            return {'is_deleted': False, 'message': str(e)}
 
     def edit_transaction(self, data):
         try:
@@ -121,12 +121,13 @@ class TransactionsService:
             amount = data.get('amount')
             comment = data.get('comment')
 
-            if not all([transaction_id, status_name, operation_type, category_name, subcategory_name, amount, comment]):
+            if not all([transaction_id, status_name, operation_type, category_name, subcategory_name, amount]):
                 return {'is_edited': False,
-                        'message': 'Send all required fields (transaction_id, status, operation_type, category, subcategory, amount, comment)'}
+                        'message': 'Send all required fields (transaction_id, status, operation_type, category, subcategory, amount)'}
 
             if not self.Transaction.filter(id=transaction_id).exists():
                 return {'is_edited': False, 'message': f'Invalid transaction_id ({transaction_id})'}
+            transaction_obj = self.Transaction.get(id=transaction_id)
 
             if not self.Status.filter(name=status_name).exists():
                 return {'is_edited': False, 'message': f'Invalid status: {status_name}'}
@@ -144,9 +145,8 @@ class TransactionsService:
                 return {'is_edited': False, 'message': f'Invalid subcategory: {subcategory_name}'}
             subcategory_obj = self.Subcategory.get(name=subcategory_name, category=category_obj)
 
-            transaction_obj = self.Transaction.get(id=transaction_id)
             transaction_obj.status = status_obj
-            transaction_obj.type = operation_type
+            transaction_obj.type = operation_obj
             transaction_obj.category = category_obj
             transaction_obj.subcategory = subcategory_obj
             transaction_obj.amount = amount

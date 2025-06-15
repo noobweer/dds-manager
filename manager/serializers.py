@@ -15,12 +15,16 @@ class OperationTypeSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    type = OperationTypeSerializer()
+
     class Meta:
         model = Category
         fields = ['id', 'name', 'type']
 
 
 class SubcategorySerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
     class Meta:
         model = Subcategory
         fields = ['id', 'name', 'category']

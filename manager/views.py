@@ -76,7 +76,7 @@ class DeleteStatusView(APIView):
 
 @permission_classes([IsAuthenticated])
 class StatusesView(APIView):
-    def get(self):
+    def get(self, request):
         statuses_result = StatusesService().all_statuses()
         return Response(statuses_result)
 
@@ -110,7 +110,7 @@ class DeleteTypeView(APIView):
 
 @permission_classes([IsAuthenticated])
 class TypesView(APIView):
-    def get(self):
+    def get(self, request):
         types_result = OperationTypeService().all_types()
         return Response(types_result)
 
@@ -144,7 +144,7 @@ class DeleteCategoryView(APIView):
 
 @permission_classes([IsAuthenticated])
 class CategoriesView(APIView):
-    def get(self):
+    def get(self, request):
         categories_result = CategoryService().all_categories()
         return Response(categories_result)
 
@@ -178,6 +178,6 @@ class DeleteSubcategoryView(APIView):
 
 @permission_classes([IsAuthenticated])
 class SubcategoriesView(APIView):
-    def get(self):
+    def get(self, request):
         subcategories_result = SubcategoryService().all_subcategories()
         return Response(subcategories_result)

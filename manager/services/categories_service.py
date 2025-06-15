@@ -68,9 +68,8 @@ class CategoryService:
 
     def all_categories(self):
         try:
-            categories = self.Category.all()
-            serializer = StatusSerializer(categories, many=True)
-
+            categories = Category.objects.select_related('type').all()
+            serializer = CategorySerializer(categories, many=True)
             return {'success': True, 'categories': serializer.data}
         except Exception as e:
             print(e)
